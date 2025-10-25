@@ -27,21 +27,21 @@
         .hero h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--chocolate-brown); margin-bottom: 1rem; opacity: 0; animation: fadeInUp 1s ease forwards 0.5s; }
         .hero .tagline { font-size: 1.3rem; color: var(--text-light); margin-bottom: 2rem; opacity: 0; animation: fadeInUp 1s ease forwards 0.7s; }
         .hero .signature { color: var(--accent-gold); font-weight: 600; }
-        .cta-button { display: inline-block; background: var(--accent-gold); color: white; padding: 1rem 2rem; text-decoration: none; border-radius: 50px; font-weight: 600; opacity: 0; animation: fadeInUp 1s ease forwards 0.9s; border: none; cursor: pointer; }
+        .cta-button { display: inline-block; background: var(--accent-gold); color: white; padding: 1rem 2rem; text-decoration: none; border-radius: 50px; font-weight: 600; opacity: 0; animation: fadeInUp 1s ease forwards 0.9s; }
         .cta-button:hover { background: var(--chocolate-brown); transform: translateY(-2px); }
         section { padding: 5rem 2rem; max-width: 1200px; margin: 0 auto; }
         .section-title { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--chocolate-brown); text-align: center; margin-bottom: 3rem; position: relative; }
         .section-title::after { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 60px; height: 3px; background: var(--accent-gold); }
         .about-content { display: grid; grid-template-columns: 1fr 2fr; gap: 4rem; align-items: center; }
         .about-image { width: 100%; height: 400px; border-radius: 20px; overflow: hidden; }
-        .profile-image { width: 100%; height: 100%; object-fit: cover; }
+        .profile-image { width: 100%; height: 100%; object-fit: cover; display: block; }
         .about-text { font-size: 1.1rem; line-height: 1.8; color: var(--text-light); }
         .about-text h3 { color: var(--chocolate-brown); margin-bottom: 1rem; font-family: 'Playfair Display', serif; }
         .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
         .product-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s; }
         .product-card:hover { transform: translateY(-10px); }
         .product-image { height: 200px; overflow: hidden; }
-        .product-image img { width: 100%; height: 100%; object-fit: cover; }
+        .product-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .product-info { padding: 1.5rem; }
         .product-info h3 { font-family: 'Playfair Display', serif; color: var(--chocolate-brown); margin-bottom: 0.5rem; }
         .product-price { color: var(--accent-gold); font-weight: 600; font-size: 1.1rem; }
@@ -50,7 +50,7 @@
         .gallery-tab.active, .gallery-tab:hover { background: var(--accent-gold); color: white; }
         .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
         .gallery-item { aspect-ratio: 1; border-radius: 15px; overflow: hidden; cursor: pointer; }
-        .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; }
         .gallery-item:hover { transform: scale(1.05); }
         .testimonials-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
         .testimonial-card { background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); position: relative; }
@@ -72,7 +72,7 @@
         .contact-item h3 { color: var(--chocolate-brown); font-family: 'Playfair Display', serif; margin: 0; }
         .contact-item p { color: var(--text-light); margin: 0; }
         .social-links { display: flex; justify-content: center; gap: 2rem; margin-top: 2rem; }
-        .social-links a { color: var(--chocolate-brown); font-size: 1.8rem; width: 50px; height: 50px; border-radius: 50%; background: rgba(255, 255, 255, 0.8); display: flex; align-items: center; justify-content: center; }
+        .social-links a { color: var(--chocolate-brown); font-size: 1.8rem; width: 50px; height: 50px; border-radius: 50%; background: rgba(255, 255, 255, 0.8); display: flex; align-items: center; justify-content: center; text-decoration: none; }
         .social-links a:hover { background: var(--accent-gold); color: white; }
         .contact-footer { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(212, 175, 55, 0.3); color: var(--text-light); }
         @keyframes fadeInUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
@@ -83,6 +83,8 @@
             .mobile-menu { display: flex; }
             .hero h1 { font-size: 2rem; }
             .about-content { grid-template-columns: 1fr; }
+            .about-image { height: auto; }
+            .profile-image { height: auto; object-fit: cover; }
             .gallery-tabs { flex-direction: column; align-items: center; }
         }
     </style>
@@ -92,7 +94,7 @@
         <div class="nav-container">
             <a href="#home" class="logo">
                 <div class="logo-circle">
-                    <img src="https://via.placeholder.com/50/d4af37/ffffff?text=SC" alt="Logo" class="logo-image">
+                    <img src="https://via.placeholder.com/50/d4af37/ffffff?text=SC" alt="Logo" class="logo-image" loading="lazy">
                 </div>
                 <span class="logo-text">Sharon's Exotic Cakes</span>
             </a>
@@ -121,13 +123,17 @@
         <h2 class="section-title">Our Story</h2>
         <div class="about-content">
             <div class="about-image">
-                <img src="sharon_merlyn.jpg" alt="Sharon Merlyn" class="profile-image">
+                <!-- use optimized svg to improve mobile load; kept lazy loading -->
+                <picture>
+                    <source srcset="sharon_merlyn_optimized.svg" type="image/svg+xml">
+                    <img src="sharon_merlyn_optimized.svg" alt="Sharon Merlyn" class="profile-image" loading="lazy" width="600" height="400">
+                </picture>
             </div>
             <div class="about-text">
                 <h3>Meet Sharon Merlyn</h3>
                 <p>Welcome to my sweet world! I'm Sharon Merlyn, and baking has been my passion for over a decade. What started as a hobby in my grandmother's kitchen has blossomed into Sharon's Exotic Cakes and More.</p>
-                <p>Every cake I create tells a story - your story. From the first sketch to the final decoration, I pour my heart into crafting unique, delicious masterpieces that make your special moments even more memorable.</p>
-                <p>My specialty lies in exotic flavors that transport your taste buds on a journey around the world. Whether it's a passion fruit mousse cake or a cardamom-rose creation, I believe every celebration deserves something extraordinary.</p>
+                <p>Every cake I create tells a story - your story. From the first sketch to the final decoration, I pour my heart into crafting unique, delicious masterpieces that make your special day unforgettable.</p>
+                <p>My specialty lies in exotic flavors that transport your taste buds on a journey around the world. Whether it's a passion fruit mousse cake or a cardamom-rose creation, I believe in surprising and delighting.</p>
                 <p><strong>What makes us unique:</strong> Personal consultation for every order, use of premium ingredients, and attention to dietary requirements including vegan and gluten-free options.</p>
             </div>
         </div>
@@ -137,7 +143,7 @@
         <h2 class="section-title">Cakes & More</h2>
         <div class="products-grid">
             <div class="product-card">
-                <div class="product-image"><img src="https://via.placeholder.com/400x200/f8e8e8/8b4513?text=Birthday+Cakes" alt="Birthday Cakes"></div>
+                <div class="product-image"><img src="https://via.placeholder.com/400x200/f8e8e8/8b4513?text=Birthday+Cakes" alt="Birthday Cakes" loading="lazy"></div>
                 <div class="product-info">
                     <h3>Birthday Cakes</h3>
                     <p>Custom birthday cakes with unique themes, flavors, and decorations that make every age milestone special.</p>
@@ -145,7 +151,7 @@
                 </div>
             </div>
             <div class="product-card">
-                <div class="product-image"><img src="https://via.placeholder.com/400x200/f8e8e8/8b4513?text=Wedding+Cakes" alt="Wedding Cakes"></div>
+                <div class="product-image"><img src="https://via.placeholder.com/400x200/f8e8e8/8b4513?text=Wedding+Cakes" alt="Wedding Cakes" loading="lazy"></div>
                 <div class="product-info">
                     <h3>Wedding Cakes</h3>
                     <p>Elegant multi-tier wedding cakes designed to match your special day's theme and dreams.</p>
@@ -153,7 +159,7 @@
                 </div>
             </div>
             <div class="product-card">
-                <div class="product-image"><img src="https://via.placeholder.com/400x200/f8e8e8/8b4513?text=Cupcakes" alt="Cupcakes"></div>
+                <div class="product-image"><img src="https://via.placeholder.com/400x200/f8e8e8/8b4513?text=Cupcakes" alt="Cupcakes" loading="lazy"></div>
                 <div class="product-info">
                     <h3>Cupcakes</h3>
                     <p>Miniature delights perfect for parties, events, or treating yourself to something sweet.</p>
@@ -161,7 +167,7 @@
                 </div>
             </div>
             <div class="product-card">
-                <div class="product-image"><img src="https://via.placeholder.com/400x200/f8e8e8/8b4513?text=Exotic+Flavors" alt="Exotic Flavors"></div>
+                <div class="product-image"><img src="https://via.placeholder.com/400x200/f8e8e8/8b4513?text=Exotic+Flavors" alt="Exotic Flavors" loading="lazy"></div>
                 <div class="product-info">
                     <h3>Exotic Flavors</h3>
                     <p>Unique combinations like Mango-Coconut, Earl Grey-Lavender, and Salted Caramel-Chocolate.</p>
@@ -169,7 +175,7 @@
                 </div>
             </div>
             <div class="product-card">
-                <div class="product-image"><img src="https://via.placeholder.com/400x200/f8e8e8/8b4513?text=Seasonal+Specials" alt="Seasonal Specials"></div>
+                <div class="product-image"><img src="https://via.placeholder.com/400x200/f8e8e8/8b4513?text=Seasonal+Specials" alt="Seasonal Specials" loading="lazy"></div>
                 <div class="product-info">
                     <h3>Seasonal Specials</h3>
                     <p>Holiday-themed cakes and seasonal flavor combinations that celebrate the time of year.</p>
@@ -177,7 +183,7 @@
                 </div>
             </div>
             <div class="product-card">
-                <div class="product-image"><img src="https://via.placeholder.com/400x200/f8e8e8/8b4513?text=Vegan+Gluten-Free" alt="Vegan & Gluten-Free"></div>
+                <div class="product-image"><img src="https://via.placeholder.com/400x200/f8e8e8/8b4513?text=Vegan+Gluten-Free" alt="Vegan & Gluten-Free" loading="lazy"></div>
                 <div class="product-info">
                     <h3>Vegan & Gluten-Free</h3>
                     <p>Delicious alternatives that don't compromise on taste for those with dietary requirements.</p>
@@ -194,22 +200,22 @@
             <button class="gallery-tab" data-tab="clients">Happy Clients</button>
         </div>
         <div id="cakes-gallery" class="gallery-grid">
-            <div class="gallery-item"><img src="https://via.placeholder.com/400/f8e8e8/8b4513?text=Cake+1" alt="Cake 1"></div>
-            <div class="gallery-item"><img src="https://via.placeholder.com/400/f8e8e8/d4af37?text=Cake+2" alt="Cake 2"></div>
-            <div class="gallery-item"><img src="https://via.placeholder.com/400/f8e8e8/8b4513?text=Cake+3" alt="Cake 3"></div>
-            <div class="gallery-item"><img src="https://via.placeholder.com/400/f8e8e8/d4af37?text=Cake+4" alt="Cake 4"></div>
-            <div class="gallery-item"><img src="https://via.placeholder.com/400/f8e8e8/8b4513?text=Cake+5" alt="Cake 5"></div>
-            <div class="gallery-item"><img src="https://via.placeholder.com/400/f8e8e8/d4af37?text=Cake+6" alt="Cake 6"></div>
-            <div class="gallery-item"><img src="https://via.placeholder.com/400/f8e8e8/8b4513?text=Cake+7" alt="Cake 7"></div>
-            <div class="gallery-item"><img src="https://via.placeholder.com/400/f8e8e8/d4af37?text=Cake+8" alt="Cake 8"></div>
+            <div class="gallery-item"><img src="https://via.placeholder.com/400/f8e8e8/8b4513?text=Cake+1" alt="Cake 1" loading="lazy"></div>
+            <div class="gallery-item"><img src="https://via.placeholder.com/400/f8e8e8/d4af37?text=Cake+2" alt="Cake 2" loading="lazy"></div>
+            <div class="gallery-item"><img src="https://via.placeholder.com/400/f8e8e8/8b4513?text=Cake+3" alt="Cake 3" loading="lazy"></div>
+            <div class="gallery-item"><img src="https://via.placeholder.com/400/f8e8e8/d4af37?text=Cake+4" alt="Cake 4" loading="lazy"></div>
+            <div class="gallery-item"><img src="https://via.placeholder.com/400/f8e8e8/8b4513?text=Cake+5" alt="Cake 5" loading="lazy"></div>
+            <div class="gallery-item"><img src="https://via.placeholder.com/400/f8e8e8/d4af37?text=Cake+6" alt="Cake 6" loading="lazy"></div>
+            <div class="gallery-item"><img src="https://via.placeholder.com/400/f8e8e8/8b4513?text=Cake+7" alt="Cake 7" loading="lazy"></div>
+            <div class="gallery-item"><img src="https://via.placeholder.com/400/f8e8e8/d4af37?text=Cake+8" alt="Cake 8" loading="lazy"></div>
         </div>
         <div id="clients-gallery" class="gallery-grid" style="display:none;">
-            <div class="gallery-item"><img src="https://via.placeholder.com/400/f8e8e8/8b4513?text=Client+1" alt="Client 1"></div>
-            <div class="gallery-item"><img src="https://via.placeholder.com/400/f8e8e8/d4af37?text=Client+2" alt="Client 2"></div>
-            <div class="gallery-item"><img src="https://via.placeholder.com/400/f8e8e8/8b4513?text=Client+3" alt="Client 3"></div>
-            <div class="gallery-item"><img src="https://via.placeholder.com/400/f8e8e8/d4af37?text=Client+4" alt="Client 4"></div>
-            <div class="gallery-item"><img src="https://via.placeholder.com/400/f8e8e8/8b4513?text=Client+5" alt="Client 5"></div>
-            <div class="gallery-item"><img src="https://via.placeholder.com/400/f8e8e8/d4af37?text=Client+6" alt="Client 6"></div>
+            <div class="gallery-item"><img src="https://via.placeholder.com/400/f8e8e8/8b4513?text=Client+1" alt="Client 1" loading="lazy"></div>
+            <div class="gallery-item"><img src="https://via.placeholder.com/400/f8e8e8/d4af37?text=Client+2" alt="Client 2" loading="lazy"></div>
+            <div class="gallery-item"><img src="https://via.placeholder.com/400/f8e8e8/8b4513?text=Client+3" alt="Client 3" loading="lazy"></div>
+            <div class="gallery-item"><img src="https://via.placeholder.com/400/f8e8e8/d4af37?text=Client+4" alt="Client 4" loading="lazy"></div>
+            <div class="gallery-item"><img src="https://via.placeholder.com/400/f8e8e8/8b4513?text=Client+5" alt="Client 5" loading="lazy"></div>
+            <div class="gallery-item"><img src="https://via.placeholder.com/400/f8e8e8/d4af37?text=Client+6" alt="Client 6" loading="lazy"></div>
         </div>
     </section>
 
@@ -218,17 +224,17 @@
         <div class="testimonials-container">
             <div class="testimonial-card">
                 <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                <p class="testimonial-text">Sharon created the most beautiful wedding cake for us! The passion fruit and white chocolate combination was divine, and every guest couldn't stop talking about it. Truly a work of art!</p>
+                <p class="testimonial-text">Sharon created the most beautiful wedding cake for us! The passion fruit and white chocolate combination was divine, and every guest couldn't stop talking about it.</p>
                 <div class="testimonial-author">- Priya & Raj Kumar</div>
             </div>
             <div class="testimonial-card">
                 <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                <p class="testimonial-text">My daughter's unicorn-themed birthday cake was beyond our expectations! Sharon captured every detail perfectly, and the taste was as magical as the design. Thank you for making her day special!</p>
+                <p class="testimonial-text">My daughter's unicorn-themed birthday cake was beyond our expectations! Sharon captured every detail perfectly.</p>
                 <div class="testimonial-author">- Meera Patel</div>
             </div>
             <div class="testimonial-card">
                 <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
-                <p class="testimonial-text">As someone with gluten intolerance, finding delicious cakes has always been a challenge. Sharon's gluten-free chocolate cake was so good, nobody could tell the difference! Exceptional service and taste.</p>
+                <p class="testimonial-text">As someone with gluten intolerance, finding delicious cakes has always been a challenge. Sharon's gluten-free chocolate cake was so good, nobody could tell the difference.</p>
                 <div class="testimonial-author">- Arjun Menon</div>
             </div>
         </div>
@@ -301,41 +307,70 @@
     </section>
 
     <script>
-        document.querySelector('.mobile-menu').addEventListener('click', () => document.querySelector('.nav-links').classList.toggle('show'));
-        document.querySelectorAll('.gallery-tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.gallery-tab').forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                if (tab.getAttribute('data-tab') === 'cakes') {
-                    document.getElementById('cakes-gallery').style.display = 'grid';
-                    document.getElementById('clients-gallery').style.display = 'none';
-                } else {
-                    document.getElementById('cakes-gallery').style.display = 'none';
-                    document.getElementById('clients-gallery').style.display = 'grid';
+        try {
+            const mobileMenu = document.querySelector('.mobile-menu');
+            const navLinks = document.querySelector('.nav-links');
+            if (mobileMenu && navLinks) {
+                mobileMenu.addEventListener('click', () => navLinks.classList.toggle('show'));
+            }
+
+            document.querySelectorAll('.gallery-tab').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    document.querySelectorAll('.gallery-tab').forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    if (tab.getAttribute('data-tab') === 'cakes') {
+                        document.getElementById('cakes-gallery').style.display = 'grid';
+                        document.getElementById('clients-gallery').style.display = 'none';
+                    } else {
+                        document.getElementById('cakes-gallery').style.display = 'none';
+                        document.getElementById('clients-gallery').style.display = 'grid';
+                    }
+                });
+            });
+
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+                    if (window.innerWidth <= 768 && document.querySelector('.nav-links')) document.querySelector('.nav-links').classList.remove('show');
+                });
+            });
+
+            const orderForm = document.querySelector('.order-form');
+            if (orderForm) {
+                orderForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    const name = document.getElementById('name').value || 'N/A';
+                    const occasion = document.getElementById('occasion').value || 'N/A';
+                    const cakeType = document.getElementById('cake-type').value || 'N/A';
+                    const date = document.getElementById('date').value || 'N/A';
+                    const message = document.getElementById('message').value || 'None';
+                    const msg = `Hi Sharon! I'd like to place an order:%0A%0AName: ${name}%0AOccasion: ${occasion}%0ACake Type: ${cakeType}%0ARequired Date: ${date}%0ASpecial Requirements: ${message}`;
+                    window.open(`https://wa.me/919483882629?text=${encodeURIComponent(decodeURIComponent(msg))}`, '_blank');
+                    alert('Thank you! You will be redirected to WhatsApp.');
+                });
+            }
+
+            const dateInput = document.getElementById('date');
+            if (dateInput) {
+                dateInput.setAttribute('min', new Date().toISOString().split('T')[0]);
+            }
+
+            document.addEventListener('DOMContentLoaded', () => {
+                document.body.style.opacity = '1';
+            });
+
+            setTimeout(() => {
+                if (document.body.style.opacity !== '1') {
+                    document.body.style.opacity = '1';
                 }
-            });
-        });
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const target = document.querySelector(this.getAttribute('href'));
-                if (target) window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
-                if (window.innerWidth <= 768) document.querySelector('.nav-links').classList.remove('show');
-            });
-        });
-        document.querySelector('.order-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const name = document.getElementById('name').value;
-            const occasion = document.getElementById('occasion').value;
-            const cakeType = document.getElementById('cake-type').value;
-            const date = document.getElementById('date').value;
-            const message = document.getElementById('message').value;
-            const msg = `Hi Sharon! I'd like to place an order:\n\nName: ${name}\nOccasion: ${occasion}\nCake Type: ${cakeType}\nRequired Date: ${date}\nSpecial Requirements: ${message || 'None'}\n\nPlease let me know the pricing and availability. Thank you!`;
-            window.open(`https://wa.me/919483882629?text=${encodeURIComponent(msg)}`, '_blank');
-            alert('Thank you! You will be redirected to WhatsApp.');
-        });
-        document.getElementById('date').setAttribute('min', new Date().toISOString().split('T')[0]);
-        window.addEventListener('load', () => document.body.style.opacity = '1');
+            }, 3000);
+
+        } catch (err) {
+            console.error('Script error:', err);
+            document.body.style.opacity = '1';
+        }
     </script>
 </body>
 </html>
