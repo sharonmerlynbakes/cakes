@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sharon's Exotic Cakes and More</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root { --primary-pink: #f8e8e8; --accent-gold: #d4af37; --soft-cream: #faf7f2; --chocolate-brown: #8b4513; --text-dark: #2c2c2c; --text-light: #666; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Poppins', sans-serif; line-height: 1.6; color: var(--text-dark); background: var(--soft-cream); opacity: 0; transition: opacity 0.5s ease; }
+        
+        /* Cake pieces animation styles */
+        .cake-pieces-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 9999;
+            overflow: hidden;
+        }
+        .cake-piece {
+            position: absolute;
+            font-size: 2rem;
+            animation: fall linear infinite;
+            opacity: 0;
+        }
+        @keyframes fall {
+            0% {
+                top: -10%;
+                opacity: 0;
+                transform: translateX(0) rotate(0deg);
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                top: 110%;
+                opacity: 0;
+                transform: translateX(var(--drift)) rotate(360deg);
+            }
+        }
+        .fade-out-animation {
+            animation: fadeOutPieces 1s ease-out forwards;
+        }
+        @keyframes fadeOutPieces {
+            to {
+                opacity: 0;
+                visibility: hidden;
+            }
+        }
+        
+        /* Image optimization styles */
+        img { max-width: 100%; height: auto; display: block; }
+        .lazy-load { opacity: 0; transition: opacity 0.3s; }
+        .lazy-load.loaded { opacity: 1; }
+        
+        .navbar { position: fixed; top: 0; width: 100%; background: rgba(248, 232, 232, 0.95); backdrop-filter: blur(10px); padding: 1rem 2rem; z-index: 1000; }
+        .nav-container { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; }
+        .logo { display: flex; align-items: center; gap: 1rem; text-decoration: none; }
+        .logo-circle { width: 50px; height: 50px; border-radius: 50%; overflow: hidden; background: var(--accent-gold); flex-shrink: 0; }
+        .logo-image { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
+        .logo-text { font-family: 'Playfair Display', serif; font-size: 1.8rem; font-weight: 700; color: var(--chocolate-brown); }
+        .nav-links { display: flex; list-style: none; gap: 2rem; }
+        .nav-links a { text-decoration: none; color: var(--text-dark); font-weight: 500; }
+        .nav-links a:hover { color: var(--accent-gold); }
+        .mobile-menu { display: none; flex-direction: column; cursor: pointer; }
+        .mobile-menu span { width: 25px; height: 3px; background: var(--chocolate-brown); margin: 3px 0; }
+        .hero { height: 100vh; background: linear-gradient(135deg, var(--primary-pink) 0%, var(--soft-cream) 100%); display: flex; align-items: center; justify-content: center; text-align: center; }
+        .hero-content { max-width: 800px; padding: 2rem; }
+        .hero h1 { font-family: 'Playfair Display', serif; font-size: 3.5rem; color: var(--chocolate-brown); margin-bottom: 1rem; opacity: 0; animation: fadeInUp 1s ease forwards 0.5s; }
+        .hero .tagline { font-size: 1.3rem; color: var(--text-light); margin-bottom: 2rem; opacity: 0; animation: fadeInUp 1s ease forwards 0.7s; }
+        .hero .signature { color: var(--accent-gold); font-weight: 600; }
+        .cta-button { display: inline-block; background: var(--accent-gold); color: white; padding: 1rem 2rem; text-decoration: none; border-radius: 50px; font-weight: 600; opacity: 0; animation: fadeInUp 1s ease forwards 0.9s; border: none; cursor: pointer; }
+        .cta-button:hover { background: var(--chocolate-brown); transform: translateY(-2px); }
+        
+        /* Special Announcement Section */
+        .announcement-section { background: linear-gradient(90deg, var(--accent-gold), var(--chocolate-brown)); padding: 1rem 0; overflow: hidden; position: relative; }
+        .announcement-container { display: flex; align-items: center; white-space: nowrap; }
+        .announcement-text { display: inline-block; padding-left: 100%; animation: scroll-left 30s linear infinite; color: white; font-size: 1.2rem; font-weight: 500; }
+        @keyframes scroll-left { 0% { transform: translateX(0); } 100% { transform: translateX(-100%); } }
+        
+        section { padding: 5rem 2rem; max-width: 1200px; margin: 0 auto; }
+        .section-title { font-family: 'Playfair Display', serif; font-size: 2.5rem; color: var(--chocolate-brown); text-align: center; margin-bottom: 3rem; position: relative; }
+        .section-title::after { content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%); width: 60px; height: 3px; background: var(--accent-gold); }
+        .about-content { display: grid; grid-template-columns: 1fr 2fr; gap: 4rem; align-items: center; }
+        .about-image { width: 100%; height: 400px; border-radius: 20px; overflow: hidden; background: var(--primary-pink); }
+        .profile-image { width: 100%; height: 100%; object-fit: cover; }
+        .about-text { font-size: 1.1rem; line-height: 1.8; color: var(--text-light); }
+        .about-text h3 { color: var(--chocolate-brown); margin-bottom: 1rem; font-family: 'Playfair Display', serif; }
+        .products-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .product-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: transform 0.3s; }
+        .product-card:hover { transform: translateY(-10px); }
+        .product-image { height: 200px; overflow: hidden; background: var(--primary-pink); }
+        .product-image img { width: 100%; height: 100%; object-fit: cover; }
+        .product-info { padding: 1.5rem; }
+        .product-info h3 { font-family: 'Playfair Display', serif; color: var(--chocolate-brown); margin-bottom: 0.5rem; }
+        .product-price { color: var(--accent-gold); font-weight: 600; font-size: 1.1rem; }
+        .gallery-tabs { display: flex; justify-content: center; gap: 2rem; margin-bottom: 3rem; }
+        .gallery-tab { padding: 1rem 2rem; background: transparent; border: 2px solid var(--accent-gold); border-radius: 50px; color: var(--accent-gold); cursor: pointer; }
+        .gallery-tab.active, .gallery-tab:hover { background: var(--accent-gold); color: white; }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
+        .gallery-item { aspect-ratio: 1; border-radius: 15px; overflow: hidden; cursor: pointer; background: var(--primary-pink); position: relative; }
+        .gallery-item img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+        .gallery-item:hover img { transform: scale(1.05); }
+        .cake-name-ribbon { position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(90deg, var(--accent-gold), var(--chocolate-brown)); color: white; padding: 0.5rem; text-align: center; font-weight: 600; font-size: 0.9rem; z-index: 10; }
+        .testimonials-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .testimonial-card { background: white; padding: 2rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); position: relative; }
+        .testimonial-card::before { content: '"'; font-size: 4rem; color: var(--accent-gold); position: absolute; top: -10px; left: 20px; font-family: 'Playfair Display', serif; }
+        .stars { color: var(--accent-gold); margin-bottom: 1rem; }
+        .testimonial-text { font-style: italic; margin-bottom: 1rem; color: var(--text-light); }
+        .testimonial-author { font-weight: 600; color: var(--chocolate-brown); }
+        .order-form { background: white; padding: 3rem; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.1); max-width: 600px; margin: 0 auto; }
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; color: var(--chocolate-brown); font-weight: 500; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 1rem; border: 2px solid #eee; border-radius: 10px; font-size: 1rem; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--accent-gold); }
+        .whatsapp-button { display: inline-flex; align-items: center; gap: 0.5rem; background: #25D366; color: white; padding: 1rem 2rem; border-radius: 50px; text-decoration: none; margin-top: 1rem; }
+        .whatsapp-button:hover { background: #128C7E; }
+        .contact { background: linear-gradient(135deg, var(--primary-pink) 0%, var(--soft-cream) 50%, var(--primary-pink) 100%); text-align: center; }
+        .contact-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-bottom: 2rem; }
+        .contact-item { display: flex; flex-direction: column; align-items: center; gap: 1rem; background: rgba(255, 255, 255, 0.8); padding: 2rem; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .contact-item i { font-size: 2rem; color: white; background: linear-gradient(45deg, var(--accent-gold), var(--chocolate-brown)); width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        .contact-item h3 { color: var(--chocolate-brown); font-family: 'Playfair Display', serif; margin: 0; }
+        .contact-item p { color: var(--text-light); margin: 0; }
+        .social-links { display: flex; justify-content: center; gap: 2rem; margin-top: 2rem; }
+        .social-links a { color: var(--chocolate-brown); font-size: 1.8rem; width: 50px; height: 50px; border-radius: 50%; background: rgba(255, 255, 255, 0.8); display: flex; align-items: center; justify-content: center; }
+        .social-links a:hover { background: var(--accent-gold); color: white; }
+        .contact-footer { margin-top: 3rem; padding-top: 2rem; border-top: 1px solid rgba(212, 175, 55, 0.3); color: var(--text-light); }
+
+        /* AI Chatbot Styles */
+        .chatbot-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            z-index: 2000;
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: pulse 2s infinite;
+        }
+        .chatbot-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+            50% { box-shadow: 0 10px 40px rgba(37, 211, 102, 0.6); }
+        }
+        .chatbot-container {
+            position: fixed;
+            bottom: 110px;
+            right: 30px;
+            width: 380px;
+            height: 550px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            display: none;
+            flex-direction: column;
+            z-index: 2000;
+            overflow: hidden;
+        }
+        .chatbot-container.active {
+            display: flex;
+            animation: slideUp 0.3s ease;
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .chatbot-header {
+            background: linear-gradient(135deg, #25D366, #128C7E);
+            color: white;
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .chatbot-header-info {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+        .chatbot-avatar {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            overflow: hidden;
+            position: relative;
+        }
+        .chatbot-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .online-indicator {
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            width: 12px;
+            height: 12px;
+            background: #25D366;
+            border: 2px solid white;
+            border-radius: 50%;
+            animation: blink 2s infinite;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        .chatbot-title h3 {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+        .chatbot-title p {
+            margin: 0;
+            font-size: 0.8rem;
+            opacity: 0.9;
+        }
+        .chatbot-close {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+        }
+        .chatbot-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+            background: var(--soft-cream);
+        }
+        .message {
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+        .message.bot {
+            justify-content: flex-start;
+        }
+        .message.user {
+            justify-content: flex-end;
+        }
+        .message-content {
+            max-width: 75%;
+            padding: 0.8rem 1rem;
+            border-radius: 15px;
+            font-size: 0.95rem;
+            line-height: 1.4;
+        }
+        .message.bot .message-content {
+            background: white;
+            color: var(--text-dark);
+            border-bottom-left-radius: 5px;
+        }
+        .message.user .message-content {
+            background: #25D366;
+            color: white;
+            border-bottom-right-radius: 5px;
+        }
+        .quick-replies {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.5rem;
+        }
+        .quick-reply-btn {
+            background: white;
+            border: 2px solid #25D366;
+            color: #25D366;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .quick-reply-btn:hover {
+            background: #25D366;
+            color: white;
+        }
+        .chatbot-input-area {
+            padding: 1rem;
+            background: white;
+            border-top: 1px solid #eee;
+            display: flex;
+            gap: 0.5rem;
+        }
+        .chatbot-input {
+            flex: 1;
+            border: 2px solid #eee;
+            border-radius: 25px;
+            padding: 0.8rem 1rem;
+            font-size: 0.95rem;
+            outline: none;
+        }
+        .chatbot-input:focus {
+            border-color: #25D366;
+        }
+        .chatbot-send {
+            background: #25D366;
+            color: white;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+        .chatbot-send:hover {
+            background: #128C7E;
+        }
+        .typing-indicator {
+            display: flex;
+            gap: 0.3rem;
+            padding: 0.8rem 1rem;
+            background: white;
+            border-radius: 15px;
+            width: fit-content;
+        }
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #25D366;
+            animation: typing 1.4s infinite;
+        }
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-10px); }
+        }
+
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
+        @media (max-width: 768px) {
+            .nav-links { display: none; position: absolute; top: 100%; left: 0; width: 100%; background: rgba(248, 232, 232, 0.98); flex-direction: column; padding: 1rem 0; }
+            .nav-links.show { display: flex; }
+            .nav-links li { margin: 0.5rem 0; text-align: center; }
+            .mobile-menu { display: flex; }
+            .hero h1 { font-size: 2rem; }
+            .about-content { grid-template-columns: 1fr; }
+            .gallery-tabs { flex-direction: column; align-items: center; }
+            .cake-piece { font-size: 1.5rem; }
+            .chatbot-container {
+                right: 10px;
+                left: 10px;
+                width: auto;
+                bottom: 90px;
+            }
+            .chatbot-button {
+                right: 20px;
+                bottom: 20px;
+                width: 60px;
+                height: 60px;
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cake Pieces Animation Container -->
+    <div class="cake-pieces-container" id="cakePiecesContainer"></div>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="#home" class="logo">
+                <div class="logo-circle">
+                    <img src="logo.jpg" alt="Sharon's Exotic Cakes Logo" class="logo-image" width="50" height="50">
+                </div>
+                <span class="logo-text">Sharon's </span>
+            </a>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">Our Story</a></li>
+                <li><a href="#products">Cakes & More</a></li>
+                <li><a href="#gallery">Gallery</a></li>
+                <li><a href="#testimonials">Testimonials</a></li>
+                <li><a href="#order">Order</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <div class="mobile-menu"><span></span><span></span><span></span></div>
+        </div>
+    </nav>
+
+    <section id="home" class="hero">
+        <div class="hero-content">
+            <h1>SHARON'S EXOTIC CAKES AND MORE</h1>
+            <p class="tagline">Handcrafted with Love by <span class="signature">Sharon Merlyn</span></p>
+            <a href="#order" class="cta-button">Order Your Dream Cake</a>
+        </div>
+    </section>
+
+    <!-- Special Announcement Section -->
+    <div class="announcement-section">
+        <div class="announcement-container">
+            <div class="announcement-text">
+                🎉 Special Announcement: Limited Time Offer - Accepting Pre-Orders for X-Mas Plum Cakes! | 🎂 New Exotic Flavor Alert - Try our Rasamalai Tiramisu! | 🌟 Pre-order your Christmas & New Year Cakes now! | ✨ Vegan and Gluten-Free options available for all celebrations! 🎉
+            </div>
+        </div>
+    </div>
+
+    <section id="about">
+        <h2 class="section-title">Our Story</h2>
+        <div class="about-content">
+            <div class="about-image">
+                <img src="sharon-profile.jpg" alt="Sharon Merlyn - Baker and Owner" class="profile-image" width="400" height="400" loading="lazy">
+            </div>
+            <div class="about-text">
+                <h3>Meet Sharon Merlyn</h3>
+                <p>Welcome to my sweet world! I'm Sharon Merlyn, and baking has been my passion for over a decade. What started as a hobby in my grandmother's kitchen has blossomed into Sharon's Exotic Cakes and More.</p>
+                <p>Every cake I create tells a story - your story. From the first sketch to the final decoration, I pour my heart into crafting unique, delicious masterpieces that make your special moments even more memorable.</p>
+                <p>My specialty lies in exotic flavors that transport your taste buds on a journey around the world. Whether it's a classic dark chocolate cake, cheesecakes or a tiramisu, I believe every celebration deserves something extraordinary.</p>
+                <p><strong>What makes us unique:</strong> Personal consultation for every order, use of premium ingredients, and attention to dietary requirements including vegan and gluten-free options.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="products">
+        <h2 class="section-title">Cakes & More</h2>
+        <div class="products-grid">
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="birthday-cakes.jpg" alt="Custom Birthday Cakes" width="400" height="200" loading="lazy">
+                </div>
+                <div class="product-info">
+                    <h3>Birthday Cakes</h3>
+                    <p>Custom birthday cakes with unique themes, flavors, and decorations that make every age milestone special.</p>
+                    <div class="product-price">Starting from ₹550</div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="wedding-cakes.jpg" alt="Elegant Wedding Cakes" width="400" height="200" loading="lazy">
+                </div>
+                <div class="product-info">
+                    <h3>Wedding Cakes</h3>
+                    <p>Elegant multi-tier wedding cakes designed to match your special day's theme and dreams.</p>
+                    <div class="product-price">Starting from ₹2,000</div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="cupcakes.jpg" alt="Delicious Cupcakes" width="400" height="200" loading="lazy">
+                </div>
+                <div class="product-info">
+                    <h3>Cupcakes</h3>
+                    <p>Miniature delights perfect for parties, events, or treating yourself to something sweet.</p>
+                    <div class="product-price">₹60 per piece</div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="exotic-flavors.jpg" alt="Exotic Flavor Cakes" width="400" height="200" loading="lazy">
+                </div>
+                <div class="product-info">
+                    <h3>Exotic Flavors</h3>
+                    <p>Unique combinations like Mango-Coconut, Earl Grey-Lavender, and Salted Caramel-Chocolate.</p>
+                    <div class="product-price">Premium pricing</div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="seasonal-specials.jpg" alt="Seasonal Special Cakes" width="400" height="200" loading="lazy">
+                </div>
+                <div class="product-info">
+                    <h3>Seasonal Specials</h3>
+                    <p>Holiday-themed cakes and seasonal flavor combinations that celebrate the time of year.</p>
+                    <div class="product-price">Varies by season</div>
+                </div>
+            </div>
+            <div class="product-card">
+                <div class="product-image">
+                    <img src="vegan-glutenfree.jpg" alt="Vegan and Gluten-Free Cakes" width="400" height="200" loading="lazy">
+                </div>
+                <div class="product-info">
+                    <h3>Vegan & Gluten-Free</h3>
+                    <p>Delicious alternatives that don't compromise on taste for those with dietary requirements.</p>
+                    <div class="product-price">Starting from ₹550</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="gallery">
+        <h2 class="section-title">Gallery</h2>
+        <div class="gallery-tabs">
+            <button class="gallery-tab active" data-tab="cakes">Cake Photos</button>
+            <button class="gallery-tab" data-tab="clients">Happy Clients</button>
+            <button class="gallery-tab" data-tab="videos">Videos</button>
+        </div>
+        <div id="cakes-gallery" class="gallery-grid">
+            <div class="gallery-item">
+                <img src="cake-1.jpg" alt="Cake Design 1" width="400" height="400" loading="lazy">
+                <div class="cake-name-ribbon">Blueberry Cheesecake</div>
+            </div>
+            <div class="gallery-item">
+                <img src="cake-2.jpg" alt="Cake Design 2" width="400" height="400" loading="lazy">
+                <div class="cake-name-ribbon">Rasamalai Tiramisu</div>
+            </div>
+            <div class="gallery-item">
+                <img src="cake-3.jpg" alt="Cake Design 3" width="400" height="400" loading="lazy">
+                <div class="cake-name-ribbon">Brookie</div>
+            </div>
+            <div class="gallery-item">
+                <img src="cake-4.jpg" alt="Cake Design 4" width="400" height="400" loading="lazy">
+                <div class="cake-name-ribbon">Dark Chocolate Cake</div>
+            </div>
+            <div class="gallery-item">
+                <img src="cake-5.jpg" alt="Cake Design 5" width="400" height="400" loading="lazy">
+                <div class="cake-name-ribbon">Nutella Cheesecake</div>
+            </div>
+            <div class="gallery-item">
+                <img src="cake-6.jpg" alt="Cake Design 6" width="400" height="400" loading="lazy">
+                <div class="cake-name-ribbon">Red Velvet Cake</div>
+            </div>
+            <div class="gallery-item">
+                <img src="cake-7.jpg" alt="Cake Design 7" width="400" height="400" loading="lazy">
+                <div class="cake-name-ribbon">Black Forest Tiramisu</div>
+            </div>
+            <div class="gallery-item">
+                <img src="cake-8.jpg" alt="Cake Design 8" width="400" height="400" loading="lazy">
+                <div class="cake-name-ribbon">Burnt Basque Cheesecake</div>
+            </div>
+        </div>
+        <div id="clients-gallery" class="gallery-grid" style="display:none;">
+            <div class="gallery-item">
+                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/KQE3U0crSS8?si=tXEQHCqfN7XL9H0R" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="gallery-item">
+                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/2rX969XLND8?si=iw7vu1bliPekogDg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="gallery-item">
+                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/Bp8S46QmJ_8?si=Fw53Up30DMUsm-Zq" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="gallery-item">
+                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/0U206Yq6zqk?si=0CgPj1YZALnpf2rX" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="gallery-item">
+                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/CKDo_3hLwC4?si=TkAcLdDjLttX8A6z" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="gallery-item">
+                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/s6FINXF27Mw?si=ya5j5SSV5zcCBV79" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="gallery-item">
+                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/vrEvCmQhOqQ?si=xJkVJoXGUUVAXrGk" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="gallery-item">
+                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/SKsomN1j2W4?si=SDCagxHThO--l_fg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+        <div id="videos-gallery" class="gallery-grid" style="display:none;">
+            <div class="gallery-item">
+                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/Tj5HQDKC7vo?si=4IxzfbRJxWDhE3Zg" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="gallery-item">
+                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/BUrVtetXvqY?si=0TBUxpyuWu8l1IWU" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="gallery-item">
+                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/vcEHQMuvkQI?si=hJRNwoPjOyy67It9" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="gallery-item">
+                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/YOUR_VIDEO_ID_4" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="gallery-item">
+                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/YOUR_VIDEO_ID_5" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="gallery-item">
+                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/YOUR_VIDEO_ID_6" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="gallery-item">
+                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/YOUR_VIDEO_ID_7" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="gallery-item">
+                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/YOUR_VIDEO_ID_8" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </div>
+    </section>
+
+    <section id="testimonials">
+        <h2 class="section-title">What Our Clients Say</h2>
+        <div class="testimonials-container">
+            <div class="testimonial-card">
+                <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                <p class="testimonial-text">Sharon created the most beautiful wedding cake for us! The passion fruit and white chocolate combination was divine, and every guest couldn't stop talking about it. Truly a work of art!</p>
+                <div class="testimonial-author">- Priya & Shane</div>
+            </div>
+            <div class="testimonial-card">
+                <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                <p class="testimonial-text">My daughter's cocomelon-themed birthday cake was beyond our expectations! Sharon captured every detail perfectly, and the taste was as magical as the design. Thank you for making her day special!</p>
+                <div class="testimonial-author">- Siya Xeon </div>
+            </div>
+            <div class="testimonial-card">
+                <div class="stars"><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i><i class="fas fa-star"></i></div>
+                <p class="testimonial-text">As someone with gluten intolerance, finding delicious cakes has always been a challenge. Sharon's gluten-free chocolate cake was so good, nobody could tell the difference! Exceptional service and taste.</p>
+                <div class="testimonial-author">- Lilly Smith</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="order">
+        <h2 class="section-title">Place Your Order</h2>
+        <form class="order-form">
+            <div class="form-group">
+                <label for="name">Your Name *</label>
+                <input type="text" id="name" required>
+            </div>
+            <div class="form-group">
+                <label for="occasion">Occasion *</label>
+                <select id="occasion" required>
+                    <option value="">Select Occasion</option>
+                    <option value="birthday">Birthday</option>
+                    <option value="wedding">Wedding</option>
+                    <option value="anniversary">Anniversary</option>
+                    <option value="corporate">Corporate Event</option>
+                    <option value="other">Other</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="cake-type">Cake Type *</label>
+                <select id="cake-type" required>
+                    <option value="">Select Cake Type</option>
+                    <option value="custom-cake">Custom Cake</option>
+                    <option value="cupcakes">Cupcakes</option>
+                    <option value="exotic-flavor">Exotic Flavor</option>
+                    <option value="vegan-gluten-free">Vegan/Gluten-Free</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="date">Required Date *</label>
+                <input type="date" id="date" required>
+            </div>
+            <div class="form-group">
+                <label for="message">Special Requirements / Message</label>
+                <textarea id="message" rows="4" placeholder="Tell us about your dream cake - theme, flavors, dietary requirements, guest count, etc."></textarea>
+            </div>
+            <button type="submit" class="cta-button">Submit Order Request</button>
+            <a href="https://wa.me/919483882629?text=Hi%20Sharon!%20I'd%20like%20to%20order%20a%20cake." class="whatsapp-button"><i class="fab fa-whatsapp"></i> Quick Order on WhatsApp</a>
+        </form>
+    </section>
+
+    <section id="contact" class="contact">
+        <h2 class="section-title">Get in Touch</h2>
+        <div class="contact-info">
+            <div class="contact-item">
+                <i class="fas fa-phone"></i>
+                <div><h3>Call Us</h3><p>+91 94838 82629</p></div>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-envelope"></i>
+                <div><h3>Email</h3><p>sharonmerlynbakes@gmail.com</p></div>
+            </div>
+            <div class="contact-item">
+                <i class="fas fa-map-marker-alt"></i>
+                <div><h3>Location</h3><p>Mysore, Karnataka</p><p>Home Delivery Available</p></div>
+            </div>
+        </div>
+        <div class="social-links">
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+            <a href="https://wa.me/919483882629"><i class="fab fa-whatsapp"></i></a>
+        </div>
+        <div class="contact-footer"><p>Copyright © 2025 ❤️ Sharon Brewster | For Sharon's Exotic Cakes and More </p></div>
+    </section>
+
+    <!-- AI Chatbot Button -->
+    <button class="chatbot-button" id="chatbotButton">
+      👩‍💻
+    </button>
+
+    <!-- AI Chatbot Container -->
+    <div class="chatbot-container" id="chatbotContainer">
+        <div class="chatbot-header">
+            <div class="chatbot-header-info">
+                <div class="chatbot-avatar">
+                    <!-- Replace 'amber-profile.jpg' with your AI assistant's profile picture -->
+                    <img src="amber-profile.jpg" alt="Amber Bowman" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                    <span style="display:none;">🤖</span>
+                    <div class="online-indicator"></div>
+                </div>
+                <div class="chatbot-title">
+                    <h3>Amber Bowman</h3>
+                    <p>Online - Ready to help!</p>
+                </div>
+            </div>
+            <button class="chatbot-close" id="chatbotClose">×</button>
+        </div>
+        <div class="chatbot-messages" id="chatbotMessages">
+            <!-- Messages will be added here -->
+        </div>
+        <div class="chatbot-input-area">
+            <input type="text" class="chatbot-input" id="chatbotInput" placeholder="Type your message...">
+            <button class="chatbot-send" id="chatbotSend">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Cake Pieces Animation
+        function createCakePieces() {
+            const container = document.getElementById('cakePiecesContainer');
+            const cakeEmojis = ['🍰', '🎂', '🧁', '🍪', '🍩', '🎉', '✨', '🌟'];
+            const colors = ['#f8e8e8', '#d4af37', '#8b4513', '#ffb6c1', '#ffd700'];
+            
+            for (let i = 0; i < 25; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'cake-piece';
+                piece.textContent = cakeEmojis[Math.floor(Math.random() * cakeEmojis.length)];
+                
+                piece.style.left = Math.random() * 100 + '%';
+                piece.style.setProperty('--drift', (Math.random() - 0.5) * 100 + 'px');
+                
+                const duration = 5 + Math.random() * 5;
+                piece.style.animationDuration = duration + 's';
+                
+                piece.style.animationDelay = (Math.random() * 3) + 's';
+                
+                if (Math.random() > 0.5) {
+                    piece.style.filter = `hue-rotate(${Math.random() * 60}deg)`;
+                }
+                
+                container.appendChild(piece);
+            }
+            
+            setTimeout(() => {
+                container.classList.add('fade-out-animation');
+                setTimeout(() => {
+                    container.remove();
+                }, 1000);
+            }, 8000);
+        }
+
+        // Original JavaScript functions
+        document.querySelector('.mobile-menu').addEventListener('click', () => document.querySelector('.nav-links').classList.toggle('show'));
+        document.querySelectorAll('.gallery-tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.gallery-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                const selectedTab = tab.getAttribute('data-tab');
+                
+                document.getElementById('cakes-gallery').style.display = 'none';
+                document.getElementById('clients-gallery').style.display = 'none';
+                document.getElementById('videos-gallery').style.display = 'none';
+                
+                if (selectedTab === 'cakes') {
+                    document.getElementById('cakes-gallery').style.display = 'grid';
+                } else if (selectedTab === 'clients') {
+                    document.getElementById('clients-gallery').style.display = 'grid';
+                } else if (selectedTab === 'videos') {
+                    document.getElementById('videos-gallery').style.display = 'grid';
+                }
+            });
+        });
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+                if (window.innerWidth <= 768) document.querySelector('.nav-links').classList.remove('show');
+            });
+        });
+        document.querySelector('.order-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('name').value;
+            const occasion = document.getElementById('occasion').value;
+            const cakeType = document.getElementById('cake-type').value;
+            const date = document.getElementById('date').value;
+            const message = document.getElementById('message').value;
+            const msg = `Hi Sharon! I'd like to place an order:\n\nName: ${name}\nOccasion: ${occasion}\nCake Type: ${cakeType}\nRequired Date: ${date}\nSpecial Requirements: ${message || 'None'}\n\nPlease let me know the pricing and availability. Thank you!`;
+            window.open(`https://wa.me/919483882629?text=${encodeURIComponent(msg)}`, '_blank');
+            alert('Thank you! You will be redirected to WhatsApp.');
+        });
+        document.getElementById('date').setAttribute('min', new Date().toISOString().split('T')[0]);
+        
+        // AI Chatbot Functionality
+        const chatbotButton = document.getElementById('chatbotButton');
+        const chatbotContainer = document.getElementById('chatbotContainer');
+        const chatbotClose = document.getElementById('chatbotClose');
+        const chatbotMessages = document.getElementById('chatbotMessages');
+        const chatbotInput = document.getElementById('chatbotInput');
+        const chatbotSend = document.getElementById('chatbotSend');
+
+        let orderData = {
+            name: '',
+            occasion: '',
+            cakeType: '',
+            flavor: '',
+            date: '',
+            guests: '',
+            dietary: '',
+            message: ''
+        };
+        let conversationStep = 0;
+
+        chatbotButton.addEventListener('click', () => {
+            chatbotContainer.classList.add('active');
+            if (conversationStep === 0) {
+                setTimeout(() => addBotMessage("Hi! 👋 I'm Amber Bowman, Sharon's personal assistant. I'm here to help you order the perfect cake! What's your name?"), 500);
+                conversationStep = 1;
+            }
+        });
+
+        chatbotClose.addEventListener('click', () => {
+            chatbotContainer.classList.remove('active');
+        });
+
+        chatbotSend.addEventListener('click', sendMessage);
+        chatbotInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') sendMessage();
+        });
+
+        function sendMessage() {
+            const message = chatbotInput.value.trim();
+            if (!message) return;
+
+            addUserMessage(message);
+            chatbotInput.value = '';
+
+            setTimeout(() => {
+                processUserMessage(message);
+            }, 1000);
+        }
+
+        function addUserMessage(message) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = 'message user';
+            messageDiv.innerHTML = `<div class="message-content">${message}</div>`;
+            chatbotMessages.appendChild(messageDiv);
+            scrollToBottom();
+        }
+
+        function addBotMessage(message, showQuickReplies = false, replies = []) {
+            showTypingIndicator();
+            
+            setTimeout(() => {
+                removeTypingIndicator();
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message bot';
+                let content = `<div class="message-content">${message}</div>`;
+                
+                if (showQuickReplies && replies.length > 0) {
+                    content += '<div class="quick-replies">';
+                    replies.forEach(reply => {
+                        content += `<button class="quick-reply-btn" onclick="handleQuickReply('${reply}')">${reply}</button>`;
+                    });
+                    content += '</div>';
+                }
+                
+                messageDiv.innerHTML = content;
+                chatbotMessages.appendChild(messageDiv);
+                scrollToBottom();
+            }, 1500);
+        }
+
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot typing-indicator-message';
+            typingDiv.innerHTML = '<div class="typing-indicator"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>';
+            chatbotMessages.appendChild(typingDiv);
+            scrollToBottom();
+        }
+
+        function removeTypingIndicator() {
+            const typing = chatbotMessages.querySelector('.typing-indicator-message');
+            if (typing) typing.remove();
+        }
+
+        function scrollToBottom() {
+            chatbotMessages.scrollTop = chatbotMessages.scrollHeight;
+        }
+
+        function processUserMessage(message) {
+            switch(conversationStep) {
+                case 1:
+                    orderData.name = message;
+                    addBotMessage(`Nice to meet you, ${message}! 🎂 What's the special occasion?`, true, ['Birthday', 'Wedding', 'Anniversary', 'Corporate Event', 'Other']);
+                    conversationStep = 2;
+                    break;
+                case 2:
+                    orderData.occasion = message;
+                    addBotMessage(`${message} - how exciting! 🎉 What type of cake are you looking for?`, true, ['Custom Cake', 'Cupcakes', 'Exotic Flavor', 'Vegan/Gluten-Free', 'Not sure yet']);
+                    conversationStep = 3;
+                    break;
+                case 3:
+                    orderData.cakeType = message;
+                    addBotMessage(`Great choice! 😊 Do you have a specific flavor in mind? (e.g., Chocolate, Vanilla, Red Velvet, Rasamalai Tiramisu, or tell me your preference)`);
+                    conversationStep = 4;
+                    break;
+                case 4:
+                    orderData.flavor = message;
+                    addBotMessage(`Delicious! 🍰 When do you need the cake? (Please provide the date)`);
+                    conversationStep = 5;
+                    break;
+                case 5:
+                    orderData.date = message;
+                    addBotMessage(`Got it! How many people will be enjoying this cake? (Approximately)`);
+                    conversationStep = 6;
+                    break;
+                case 6:
+                    orderData.guests = message;
+                    addBotMessage(`Perfect! ✨ Do you have any dietary requirements or allergies I should know about?`, true, ['No dietary requirements', 'Vegan', 'Gluten-Free', 'Nut Allergy', 'Other']);
+                    conversationStep = 7;
+                    break;
+                case 7:
+                    orderData.dietary = message;
+                    addBotMessage(`Thank you! 🎨 Any special design requests, themes, or additional details you'd like to share?`);
+                    conversationStep = 8;
+                    break;
+                case 8:
+                    orderData.message = message;
+                    const summary = `Perfect! Let me summarize your order:\n\n` +
+                        `👤 Name: ${orderData.name}\n` +
+                        `🎉 Occasion: ${orderData.occasion}\n` +
+                        `🎂 Cake Type: ${orderData.cakeType}\n` +
+                        `🍰 Flavor: ${orderData.flavor}\n` +
+                        `📅 Date: ${orderData.date}\n` +
+                        `👥 Guests: ${orderData.guests}\n` +
+                        `🌱 Dietary: ${orderData.dietary}\n` +
+                        `💬 Special Requests: ${orderData.message}\n\n` +
+                        `Would you like me to send this order to Sharon via WhatsApp?`;
+                    addBotMessage(summary, true, ['Yes, send it!', 'Let me make changes']);
+                    conversationStep = 9;
+                    break;
+                case 9:
+                    if (message.toLowerCase().includes('yes') || message.toLowerCase().includes('send')) {
+                        sendToWhatsAppAndEmail();
+                    } else {
+                        addBotMessage(`No problem! What would you like to change? Just let me know and we can start over! 😊`);
+                        conversationStep = 1;
+                        orderData = {name: '', occasion: '', cakeType: '', flavor: '', date: '', guests: '', dietary: '', message: ''};
+                    }
+                    break;
+                default:
+                    addBotMessage(`I'm here to help! Would you like to place a new order?`, true, ['Yes, new order', 'Just browsing']);
+            }
+        }
+
+        function handleQuickReply(reply) {
+            addUserMessage(reply);
+            setTimeout(() => {
+                processUserMessage(reply);
+            }, 1000);
+        }
+
+        function sendToWhatsAppAndEmail() {
+            const whatsappMessage = `Hi Sharon! New Order from Amber Bowman (AI Assistant):\n\n` +
+                `👤 Name: ${orderData.name}\n` +
+                `🎉 Occasion: ${orderData.occasion}\n` +
+                `🎂 Cake Type: ${orderData.cakeType}\n` +
+                `🍰 Flavor: ${orderData.flavor}\n` +
+                `📅 Required Date: ${orderData.date}\n` +
+                `👥 Number of Guests: ${orderData.guests}\n` +
+                `🌱 Dietary Requirements: ${orderData.dietary}\n` +
+                `💬 Special Requests: ${orderData.message}\n\n` +
+                `Please let me know the pricing and availability. Thank you!`;
+            
+            // Send to WhatsApp only
+            window.open(`https://wa.me/919483882629?text=${encodeURIComponent(whatsappMessage)}`, '_blank');
+            
+            addBotMessage(`🎉 Awesome! I've sent your order to Sharon via WhatsApp! Sharon will get back to you soon with pricing and availability! Thank you for choosing Sharon's Exotic Cakes! 💖`);
+            
+            setTimeout(() => {
+                conversationStep = 0;
+                orderData = {name: '', occasion: '', cakeType: '', flavor: '', date: '', guests: '', dietary: '', message: ''};
+                addBotMessage(`Is there anything else I can help you with?`, true, ['Place another order', 'No, thank you']);
+            }, 3000);
+        }
+        
+        // Initialize page
+        window.addEventListener('load', () => {
+            document.body.style.opacity = '1';
+            createCakePieces();
+        });
+    </script>
+</body>
+</html>
